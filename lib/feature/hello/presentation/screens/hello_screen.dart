@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:project_graduation/core/constants/app_routes.dart';
-import '../../../../core/widget/custom_button.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_styles.dart';
 
+import 'package:shoppingapp/core/routes/app_routes_name.dart';
+import 'package:shoppingapp/core/theme/app_colors.dart';
+import 'package:shoppingapp/core/theme/text_styles.dart';
+import 'package:shoppingapp/core/widgets/custom_button.dart';
+
+import 'package:shoppingapp/core/helper/spacing_helper.dart';
 
 class HelloScreen extends StatelessWidget {
   const HelloScreen({super.key});
@@ -19,14 +21,14 @@ class HelloScreen extends StatelessWidget {
             children: [
               const Spacer(),
               Image.asset(
-                'assets/images/halloScreen.png',
+                'assets/image/halloScreen.png',
                 height: MediaQuery.of(context).size.height * 0.35,
                 fit: BoxFit.contain,
               ),
-              const SizedBox(height: 32),
+              verticalSpacing(32),
               Text(
                 'Hello!',
-                style: AppTextStyles.h2Heading.copyWith(
+                style: AppTextStyles.h2.copyWith(
                   fontSize: 36,
                   fontWeight: FontWeight.bold,
                   color: AppColors.charcoal,
@@ -35,35 +37,38 @@ class HelloScreen extends StatelessWidget {
               const Spacer(),
               CustomButton(
                 title: 'Signup',
-                backgroundColor: AppColors.charcoal,
+                backgroundColor: AppColors.primaryOrange,
                 onPressed: () {
-                  Navigator.pushNamed(context, AppRoutes.register);
+                  Navigator.pushNamed(context, AppRoutesName.register);
                 },
               ),
-              const SizedBox(height: 12),
+              verticalSpacing(12),
               SizedBox(
                 width: double.infinity,
                 height: 52,
                 child: OutlinedButton(
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, AppRoutes.login);
+                    Navigator.pushReplacementNamed(
+                      context,
+                      AppRoutesName.login,
+                    );
                   },
                   style: OutlinedButton.styleFrom(
                     splashFactory: NoSplash.splashFactory,
-                    side: const BorderSide(color: AppColors.charcoal),
+                    side: const BorderSide(color: AppColors.primaryOrange),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
                   child: Text(
                     'Login',
-                    style: AppTextStyles.buttonText.copyWith(
-                      color: AppColors.charcoal,
+                    style: AppTextStyles.button.copyWith(
+                      color: AppColors.primaryOrange,
                     ),
                   ),
                 ),
               ),
-              const SizedBox(height: 32),
+              verticalSpacing(32),
             ],
           ),
         ),
