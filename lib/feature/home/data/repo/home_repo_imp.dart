@@ -16,4 +16,9 @@ class HomeRepoImp implements HomeRepoInterface {
   @override
   Future<ResultApi<List<ProductEntity>>> getAllProduct() async =>
       await _dataSource.getAllProduct();
-}
+
+  @override
+  Future<ResultApi<List<ProductEntity>>> getAllProductByCategory(String categoryId)async =>
+      await _dataSource.getAllProductByCategory(categoryId);
+  }
+

@@ -6,4 +6,5 @@ abstract interface class HomeApi {
   Future<ResultApi<CategoryDto>> getAllCategories();
 
   Future<ResultApi<ProductDto>> getAllProducts();
+  Future<ResultApi<ProductDto>> getAllProductsByCategory(String categoryId);
 }

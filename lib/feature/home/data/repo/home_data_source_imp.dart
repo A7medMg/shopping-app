@@ -31,4 +31,15 @@ class HomeDataSourceImp implements HomeDataSourceInterface {
         return AppError(result.messageError);
     }
   }
+
+  @override
+  Future<ResultApi<List<ProductEntity>>> getAllProductByCategory(String categoryId) async {
+    final result = await _api.getAllProductsByCategory(categoryId);
+    switch (result) {
+      case Success():
+        return Success(result.data.toEntity());
+      case AppError():
+        return AppError(result.messageError);
+    }
+  }
 }
