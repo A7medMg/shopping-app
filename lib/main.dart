@@ -21,7 +21,7 @@ class ShoppingApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) => MaterialApp(
-        initialRoute: AppRoutesName.appSection,
+        initialRoute: AppRoutesName.onBoarding,
         onGenerateRoute: AppRoutes.onGenerateRoute,
         debugShowCheckedModeBanner: false,
         theme: AppTheme.light,

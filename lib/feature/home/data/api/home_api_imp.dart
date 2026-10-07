@@ -46,4 +46,25 @@ class HomeApiImp implements HomeApi {
       return AppError(e.toString());
     }
   }
+
+  @override
+  Future<ResultApi<ProductDto>> getAllProductsByCategory(String categoryId) async {
+    try {
+      final response = await _dio.get( '${ApiConstants.getProByCategory}/$categoryId',
+    queryParameters: {
+      'skip': 0,
+      'limit': 5,
+    },);
+
+      if (response.statusCode! >= 200 && response.statusCode! < 300) {
+        return Success(ProductDto.fromJson(response.data));
+      }
+
+      return AppError('Server Error');
+    } on DioException catch (e) {
+      return AppError(ApiErrorHandler.getMessage(e));
+    } catch (e) {
+      return AppError(e.toString());
+    }
+  }
 }

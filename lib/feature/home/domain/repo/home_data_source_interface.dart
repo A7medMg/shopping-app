@@ -5,4 +5,6 @@ import 'package:shoppingapp/feature/home/domain/entities/category_entity.dart';
 abstract interface class HomeDataSourceInterface {
   Future<ResultApi<List<CategoryEntity>>> getAllCategory();
   Future<ResultApi<List<ProductEntity>>> getAllProduct();
+  Future<ResultApi<List<ProductEntity>>> getAllProductByCategory(String categoryId);
+
 }

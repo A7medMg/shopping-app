@@ -6,7 +6,7 @@ class HomeTapBar extends StatefulWidget {
   const HomeTapBar({super.key, required this.category, required this.onTap});
 
   final List<CategoryEntity> category;
-  final Function(int index) onTap;
+  final Function(String categorySlug) onTap;
 
   @override
   State<HomeTapBar> createState() => _HomeTapBarState();
@@ -27,7 +27,7 @@ class _HomeTapBarState extends State<HomeTapBar> {
                 selectedCategory = index;
               });
 
-              widget.onTap(index);
+              widget.onTap(widget.category[index].slug);
             },
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
