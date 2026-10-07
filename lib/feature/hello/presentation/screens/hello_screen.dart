@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shoppingapp/core/extensions/extensions.dart';
 
 import 'package:shoppingapp/core/routes/app_routes_name.dart';
 import 'package:shoppingapp/core/theme/app_colors.dart';
@@ -48,10 +49,7 @@ class HelloScreen extends StatelessWidget {
                 height: 52,
                 child: OutlinedButton(
                   onPressed: () {
-                    Navigator.pushReplacementNamed(
-                      context,
-                      AppRoutesName.login,
-                    );
+                    context.pushNamed(AppRoutesName.onBoarding);
                   },
                   style: OutlinedButton.styleFrom(
                     splashFactory: NoSplash.splashFactory,
