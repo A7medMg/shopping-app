@@ -6,6 +6,7 @@ import 'package:shoppingapp/core/routes/app_routes_name.dart';
 import 'package:shoppingapp/core/theme/app_theme.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   configureDependencies();
   runApp(const ShoppingApp());
 }
@@ -20,7 +21,7 @@ class ShoppingApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) => MaterialApp(
-        initialRoute: AppRoutesName.onBoarding,
+        initialRoute: AppRoutesName.appSection,
         onGenerateRoute: AppRoutes.onGenerateRoute,
         debugShowCheckedModeBanner: false,
         theme: AppTheme.light,
