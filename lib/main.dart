@@ -6,6 +6,7 @@ import 'package:shoppingapp/core/routes/app_routes_name.dart';
 import 'package:shoppingapp/core/theme/app_theme.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   configureDependencies();
   runApp(const ShoppingApp());
 }

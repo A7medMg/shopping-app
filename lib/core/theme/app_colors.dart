@@ -36,6 +36,8 @@ abstract final class AppColors {
   static const Color outOfStock = Color(0xFFFF3B3B);
   static const Color outOfStockBackground = Color(0xFFFFE8E8);
 
+  static const Color discount = Color(0xFFFF3B3B);
+
   static const Color newArrival = Color(0xFF5D2C91);
   static const Color newArrivalBackground = Color(0xFFEDE6F7);
 
