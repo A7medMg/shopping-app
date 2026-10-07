@@ -41,7 +41,6 @@ dependencies:
   get_it: ^9.3.0
   injectable: ^2.5.0
   pretty_dio_logger: ^1.4.0
-  flutter_floating_bottom_bar: ^3.0.0
   flutter_secure_storage: ^11.2.0
   skeletonizer: ^3.0.0
 
