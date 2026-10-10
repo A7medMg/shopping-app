@@ -14,6 +14,13 @@ import 'package:shoppingapp/feature/home/presentation/view_models/home_cubit.dar
 class AppSection extends StatelessWidget {
   const AppSection({super.key});
 
+  static const List<Widget> _screens = [
+    HomeScreen(),
+    CartScreen(),
+    FavouriteScreen(),
+    AccountScreen(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -27,28 +34,19 @@ class AppSection extends StatelessWidget {
       ],
       child: BlocBuilder<AppSectionCubit, int>(
         builder: (context, currentIndex) {
-          final screens = [
-            const HomeScreen(),
-            const CartScreen(),
-            const FavouriteScreen(),
-            const AccountScreen(),
-          ];
-
           return Scaffold(
-            body: screens[currentIndex],
-
+            body: IndexedStack(
+              index: currentIndex,
+              children: _screens,
+            ),
             bottomNavigationBar: BottomNavigationBar(
               currentIndex: currentIndex,
-
               onTap: (index) {
                 context.read<AppSectionCubit>().changeTab(index);
               },
-
               type: BottomNavigationBarType.fixed,
-
               selectedItemColor: AppColors.primaryOrange,
               unselectedItemColor: AppColors.mutedText,
-
               items: const [
                 BottomNavigationBarItem(
                   icon: Icon(Icons.home_outlined),
