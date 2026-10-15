@@ -17,6 +17,26 @@ import 'package:injectable/injectable.dart' as _i526;
 import 'package:shoppingapp/core/di/register_module.dart' as _i999;
 import 'package:shoppingapp/core/helper/app_secure_storage.dart' as _i161;
 import 'package:shoppingapp/core/network/dio_factory.dart' as _i590;
+import 'package:shoppingapp/feature/account/data/api/account_api_imp.dart'
+    as _i910;
+import 'package:shoppingapp/feature/account/data/api/account_api_interface.dart'
+    as _i179;
+import 'package:shoppingapp/feature/account/data/repo/acc_data_source_imp.dart'
+    as _i793;
+import 'package:shoppingapp/feature/account/data/repo/acc_repo_imp.dart'
+    as _i802;
+import 'package:shoppingapp/feature/account/domain/repo/acc_data_source_interface.dart'
+    as _i18;
+import 'package:shoppingapp/feature/account/domain/repo/acc_repo_interface.dart'
+    as _i344;
+import 'package:shoppingapp/feature/account/domain/use_case/edit_user_use_case.dart'
+    as _i451;
+import 'package:shoppingapp/feature/account/domain/use_case/get_user_use_case.dart'
+    as _i653;
+import 'package:shoppingapp/feature/account/domain/use_case/upload_user_image_use_case.dart'
+    as _i1002;
+import 'package:shoppingapp/feature/account/presentation/view_model/account_cubit.dart'
+    as _i846;
 import 'package:shoppingapp/feature/app_section/presentation/view_model/app_section_cubit.dart'
     as _i525;
 import 'package:shoppingapp/feature/auth/data/api/auth_api.dart' as _i425;
@@ -79,8 +99,17 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i525.AppSectionCubit>(() => _i525.AppSectionCubit());
     gh.singleton<_i590.DioFactory>(() => _i590.DioFactory());
     gh.lazySingleton<_i361.Dio>(() => registerModule.dio);
+    gh.factory<_i179.AccountApiInterface>(
+      () => _i910.AccountApiImp(gh<_i361.Dio>()),
+    );
     gh.factory<_i165.ProductDetailsApi>(
       () => _i318.ProductDetailsApiImp(gh<_i361.Dio>()),
+    );
+    gh.factory<_i18.AccDataSourceInterface>(
+      () => _i793.AccDataSourceImp(
+        gh<_i361.Dio>(),
+        gh<_i179.AccountApiInterface>(),
+      ),
     );
     gh.factory<_i855.HomeApi>(() => _i204.HomeApiImp(gh<_i361.Dio>()));
     gh.lazySingleton<_i161.AppSecureStorage>(
@@ -97,6 +126,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i425.AuthApi>(
       () => _i425.AuthApi(gh<_i590.DioFactory>(), gh<_i161.AppSecureStorage>()),
+    );
+    gh.factory<_i344.AccRepoInterface>(
+      () => _i802.AccRepoImp(gh<_i18.AccDataSourceInterface>()),
     );
     gh.factory<_i627.AuthDataSourceInterface>(
       () => _i520.AuthDataSourceImp(gh<_i425.AuthApi>()),
@@ -134,12 +166,28 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i1068.GetAllCategoryUseCase>(),
       ),
     );
+    gh.factory<_i451.EditUserUseCase>(
+      () => _i451.EditUserUseCase(gh<_i344.AccRepoInterface>()),
+    );
+    gh.factory<_i653.GetUserUseCase>(
+      () => _i653.GetUserUseCase(gh<_i344.AccRepoInterface>()),
+    );
+    gh.factory<_i1002.UploadImageUseCase>(
+      () => _i1002.UploadImageUseCase(gh<_i344.AccRepoInterface>()),
+    );
     gh.factory<_i437.LoginCubit>(
       () => _i437.LoginCubit(gh<_i515.LoginUseCase>()),
     );
     gh.factory<_i257.GetProductDetailsUseCase>(
       () => _i257.GetProductDetailsUseCase(
         gh<_i878.ProductDetailsRepoInterface>(),
+      ),
+    );
+    gh.factory<_i846.AccountCubit>(
+      () => _i846.AccountCubit(
+        gh<_i653.GetUserUseCase>(),
+        gh<_i1002.UploadImageUseCase>(),
+        gh<_i451.EditUserUseCase>(),
       ),
     );
     gh.factory<_i879.RegisterCubit>(

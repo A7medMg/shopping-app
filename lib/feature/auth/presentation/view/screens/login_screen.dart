@@ -21,7 +21,7 @@ class LoginScreen extends StatelessWidget {
             context,
           ).showSnackBar(const SnackBar(content: Text('Login successful')));
 
-          Navigator.pushNamed(context, AppRoutesName.onBoarding);
+          Navigator.pushNamed(context, AppRoutesName.appSection);
         } else if (state is LoginError) {
           Navigator.of(context).pop();
 

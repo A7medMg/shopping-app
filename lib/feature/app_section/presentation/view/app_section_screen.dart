@@ -5,6 +5,7 @@ import 'package:shoppingapp/core/di/service_locator.dart';
 import 'package:shoppingapp/core/theme/app_colors.dart';
 
 import 'package:shoppingapp/feature/account/presentation/view/screens/account_screen.dart';
+import 'package:shoppingapp/feature/account/presentation/view_model/account_cubit.dart';
 import 'package:shoppingapp/feature/app_section/presentation/view_model/app_section_cubit.dart';
 import 'package:shoppingapp/feature/cart/presentation/view/screens/cart_screen.dart';
 import 'package:shoppingapp/feature/favourite/presentation/view/screens/favourite_screen.dart';
@@ -14,25 +15,28 @@ import 'package:shoppingapp/feature/home/presentation/view_models/home_cubit.dar
 class AppSection extends StatelessWidget {
   const AppSection({super.key});
 
-  static final List<Widget> _screens = [
-    BlocProvider(
-      create: (context) => serviceLocator<HomeCubit>()..getHomeData(),
-      child: const HomeScreen(),
-    ),
-    const CartScreen(),
-    const FavouriteScreen(),
-    const AccountScreen(),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AppSectionCubit, int>(
       builder: (context, currentIndex) {
-        return Scaffold(
-          body: IndexedStack(
-            index: currentIndex,
-            children: _screens,
+        final screens = <Widget>[
+          BlocProvider(
+            create: (context) => serviceLocator<HomeCubit>()..getHomeData(),
+            child: const HomeScreen(),
           ),
+          const CartScreen(),
+          const FavouriteScreen(),
+          if (currentIndex == 3)
+            BlocProvider(
+              create: (context) => serviceLocator<AccountCubit>(),
+              child: const AccountScreen(),
+            )
+          else
+            const SizedBox.shrink(),
+        ];
+
+        return Scaffold(
+          body: IndexedStack(index: currentIndex, children: screens),
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: currentIndex,
             onTap: (index) {

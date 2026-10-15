@@ -9,18 +9,11 @@ import 'package:shoppingapp/feature/auth/presentation/view/screens/register_scre
 import 'package:shoppingapp/feature/auth/presentation/view_model/login/login_cubit.dart';
 import 'package:shoppingapp/feature/auth/presentation/view_model/register/register_cubit.dart';
 import 'package:shoppingapp/feature/hello/presentation/screens/hello_screen.dart';
-import 'package:shoppingapp/feature/home/presentation/view_models/home_cubit.dart';
 
 abstract class AppRoutes {
   static Route? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
-      case AppRoutesName.onBoarding:
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (_) => serviceLocator<HomeCubit>()..getHomeData(),
-            child: AppSection(),
-          ),
-        );
+    
 
       case AppRoutesName.appSection:
         return MaterialPageRoute(
