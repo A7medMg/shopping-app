@@ -22,6 +22,8 @@ abstract class ApiConstants {
   static const String editUserData = '/portfoilo/editUserData';
   static const String uploadImage = '/portfoilo/addImage';
   static Future<String?> getToken() async {
-    return await AppSecureStorage(const FlutterSecureStorage()).read(AppKeys.token);
+    return await AppSecureStorage(
+      const FlutterSecureStorage(),
+    ).read(AppKeys.token);
   }
 }
