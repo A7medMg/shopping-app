@@ -14,8 +14,27 @@ import 'package:dio/dio.dart' as _i361;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i558;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
+import 'package:shoppingapp/core/di/register_module.dart' as _i999;
 import 'package:shoppingapp/core/helper/app_secure_storage.dart' as _i161;
 import 'package:shoppingapp/core/network/dio_factory.dart' as _i590;
+import 'package:shoppingapp/feature/app_section/presentation/view_model/app_section_cubit.dart'
+    as _i525;
+import 'package:shoppingapp/feature/auth/data/api/auth_api.dart' as _i425;
+import 'package:shoppingapp/feature/auth/data/repo/auth_data_source_imp.dart'
+    as _i520;
+import 'package:shoppingapp/feature/auth/data/repo/auth_repo_imp.dart' as _i167;
+import 'package:shoppingapp/feature/auth/domain/repo/auth_data_source_interface.dart'
+    as _i627;
+import 'package:shoppingapp/feature/auth/domain/repo/auth_repo_interface.dart'
+    as _i32;
+import 'package:shoppingapp/feature/auth/domain/use_case/login_use_case.dart'
+    as _i515;
+import 'package:shoppingapp/feature/auth/domain/use_case/register_use_case.dart'
+    as _i700;
+import 'package:shoppingapp/feature/auth/presentation/view_model/login/login_cubit.dart'
+    as _i437;
+import 'package:shoppingapp/feature/auth/presentation/view_model/register/register_cubit.dart'
+    as _i879;
 import 'package:shoppingapp/feature/home/data/api/home_api.dart' as _i855;
 import 'package:shoppingapp/feature/home/data/api/home_api_imp.dart' as _i204;
 import 'package:shoppingapp/feature/home/data/repo/home_data_source_imp.dart'
@@ -41,8 +60,11 @@ extension GetItInjectableX on _i174.GetIt {
     _i526.EnvironmentFilter? environmentFilter,
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
-    final dioModule = _$DioModule();
-    gh.singleton<_i361.Dio>(() => dioModule.provideDio());
+    final registerModule = _$RegisterModule();
+    gh.factory<_i558.FlutterSecureStorage>(() => registerModule.secureStorage);
+    gh.factory<_i525.AppSectionCubit>(() => _i525.AppSectionCubit());
+    gh.singleton<_i590.DioFactory>(() => _i590.DioFactory());
+    gh.lazySingleton<_i361.Dio>(() => registerModule.dio);
     gh.factory<_i855.HomeApi>(() => _i204.HomeApiImp(gh<_i361.Dio>()));
     gh.lazySingleton<_i161.AppSecureStorage>(
       () => _i161.AppSecureStorage(gh<_i558.FlutterSecureStorage>()),
@@ -53,6 +75,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i170.HomeRepoInterface>(
       () => _i111.HomeRepoImp(gh<_i1052.HomeDataSourceInterface>()),
     );
+    gh.lazySingleton<_i425.AuthApi>(
+      () => _i425.AuthApi(gh<_i590.DioFactory>(), gh<_i161.AppSecureStorage>()),
+    );
+    gh.factory<_i627.AuthDataSourceInterface>(
+      () => _i520.AuthDataSourceImp(gh<_i425.AuthApi>()),
+    );
     gh.factory<_i1068.GetAllCategoryUseCase>(
       () => _i1068.GetAllCategoryUseCase(gh<_i170.HomeRepoInterface>()),
     );
@@ -62,6 +90,18 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i293.GetAllProductByCategoryUseCase>(
       () => _i293.GetAllProductByCategoryUseCase(gh<_i170.HomeRepoInterface>()),
     );
+    gh.factory<_i32.AuthRepoInterface>(
+      () => _i167.AuthRepoImp(
+        gh<_i627.AuthDataSourceInterface>(),
+        gh<_i161.AppSecureStorage>(),
+      ),
+    );
+    gh.factory<_i515.LoginUseCase>(
+      () => _i515.LoginUseCase(gh<_i32.AuthRepoInterface>()),
+    );
+    gh.factory<_i700.RegisterUseCase>(
+      () => _i700.RegisterUseCase(gh<_i32.AuthRepoInterface>()),
+    );
     gh.factory<_i765.HomeCubit>(
       () => _i765.HomeCubit(
         gh<_i418.GetAllProductUseCase>(),
@@ -69,8 +109,14 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i1068.GetAllCategoryUseCase>(),
       ),
     );
+    gh.factory<_i437.LoginCubit>(
+      () => _i437.LoginCubit(gh<_i515.LoginUseCase>()),
+    );
+    gh.factory<_i879.RegisterCubit>(
+      () => _i879.RegisterCubit(gh<_i700.RegisterUseCase>()),
+    );
     return this;
   }
 }
 
-class _$DioModule extends _i590.DioModule {}
+class _$RegisterModule extends _i999.RegisterModule {}
