@@ -1,7 +1,3 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:shoppingapp/core/constants/app_keys.dart';
-import 'package:shoppingapp/core/helper/app_secure_storage.dart';
-
 abstract class ApiConstants {
   static const String baseUrl = 'https://supermarket-dan1.onrender.com/api/v1';
   static String register = "/auth/signUp";
@@ -22,9 +18,4 @@ abstract class ApiConstants {
   static const String getUserData = '/portfoilo/userData';
   static const String editUserData = '/portfoilo/editUserData';
   static const String uploadImage = '/portfoilo/addImage';
-  static Future<String?> getToken() async {
-    return await AppSecureStorage(
-      const FlutterSecureStorage(),
-    ).read(AppKeys.token);
-  }
 }
