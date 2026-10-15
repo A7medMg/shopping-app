@@ -1,27 +1,46 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-
+import 'package:shoppingapp/core/constants/api_constatnts.dart';
+import 'package:shoppingapp/core/constants/app_keys.dart';
+import 'package:shoppingapp/core/helper/app_secure_storage.dart';
 
 @singleton
 class DioFactory {
-  late final Dio dio;
+  final Dio dio;
 
-  DioFactory(String apiBaseUrl) : dio = _createDio(apiBaseUrl);
+  DioFactory()
+    : dio = Dio(
+        BaseOptions(
+          baseUrl: ApiConstants.baseUrl,
+          connectTimeout: const Duration(seconds: 30),
+          receiveTimeout: const Duration(seconds: 30),
+          headers: {'Accept': 'application/json'},
+        ),
+      ) {
+    _addInterceptors();
+  }
 
-  static Dio _createDio(String apiBaseUrl) {
-    const connectTimeout = Duration(seconds: 30);
-    final dio = Dio(
-      BaseOptions(
-        baseUrl: apiBaseUrl,
-        connectTimeout: connectTimeout,
-        receiveTimeout: connectTimeout,
+  void _addInterceptors() {
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) async {
+          final token = await AppSecureStorage(
+            const FlutterSecureStorage(),
+          ).read(AppKeys.token);
+
+          if (token != null && token.isNotEmpty) {
+            options.headers['Authorization'] = 'Bearer $token';
+          } else {
+            options.headers.remove('Authorization');
+          }
+
+          handler.next(options);
+        },
       ),
     );
-    dio.options.headers = {
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $token',
-    };
+
     dio.interceptors.add(
       PrettyDioLogger(
         requestBody: true,
@@ -29,7 +48,13 @@ class DioFactory {
         responseHeader: true,
       ),
     );
-    return dio;
+  }
+
+  void setTokenIntoHeaderAfterLogin(String token) {
+    dio.options.headers['Authorization'] = 'Bearer $token';
+  }
+
+  void removeTokenFromHeader() {
+    dio.options.headers.remove('Authorization');
   }
 }
-String token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYmZkYjczYjUyNzAxMTA5YTJiYjUzZSIsImlhdCI6MTc5MTAzOTIzNywiZXhwIjoxNzkzNjMxMjM3fQ.TSXiygT8c4LeEUi-K_-iC1G9CoHJxf8r1hWzojIStiI";
