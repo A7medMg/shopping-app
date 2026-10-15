@@ -15,11 +15,11 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Hi", style: Theme.of(context).textTheme.headlineMedium),
+            Text("Hi", style: Theme.of(context).textTheme.bodyLarge),
 
             Text(
               "Let’s start your day",
-              style: Theme.of(context).textTheme.headlineMedium,
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
 
             HomeCategoryBlocBuilder(),
