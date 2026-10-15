@@ -52,6 +52,20 @@ import 'package:shoppingapp/feature/home/domain/use_case/get_products_by_categor
     as _i293;
 import 'package:shoppingapp/feature/home/presentation/view_models/home_cubit.dart'
     as _i765;
+import 'package:shoppingapp/feature/product_details/api/product_details_api_imp.dart'
+    as _i318;
+import 'package:shoppingapp/feature/product_details/data/api/product_details_api.dart'
+    as _i165;
+import 'package:shoppingapp/feature/product_details/data/repo/product_details_data_source_imp.dart'
+    as _i187;
+import 'package:shoppingapp/feature/product_details/data/repo/product_details_repo_imp.dart'
+    as _i391;
+import 'package:shoppingapp/feature/product_details/domain/repo/product_details_data_source_interface.dart'
+    as _i710;
+import 'package:shoppingapp/feature/product_details/domain/repo/product_details_repo_interface.dart'
+    as _i878;
+import 'package:shoppingapp/feature/product_details/domain/use_case/get_product_details_use_case.dart'
+    as _i257;
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
@@ -65,6 +79,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i525.AppSectionCubit>(() => _i525.AppSectionCubit());
     gh.singleton<_i590.DioFactory>(() => _i590.DioFactory());
     gh.lazySingleton<_i361.Dio>(() => registerModule.dio);
+    gh.factory<_i165.ProductDetailsApi>(
+      () => _i318.ProductDetailsApiImp(gh<_i361.Dio>()),
+    );
     gh.factory<_i855.HomeApi>(() => _i204.HomeApiImp(gh<_i361.Dio>()));
     gh.lazySingleton<_i161.AppSecureStorage>(
       () => _i161.AppSecureStorage(gh<_i558.FlutterSecureStorage>()),
@@ -74,6 +91,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i170.HomeRepoInterface>(
       () => _i111.HomeRepoImp(gh<_i1052.HomeDataSourceInterface>()),
+    );
+    gh.factory<_i710.ProductDetailsDataSourceInterface>(
+      () => _i187.ProductDetailsDataSourceImp(gh<_i165.ProductDetailsApi>()),
     );
     gh.lazySingleton<_i425.AuthApi>(
       () => _i425.AuthApi(gh<_i590.DioFactory>(), gh<_i161.AppSecureStorage>()),
@@ -89,6 +109,11 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i293.GetAllProductByCategoryUseCase>(
       () => _i293.GetAllProductByCategoryUseCase(gh<_i170.HomeRepoInterface>()),
+    );
+    gh.factory<_i878.ProductDetailsRepoInterface>(
+      () => _i391.ProductDetailsRepoImp(
+        gh<_i710.ProductDetailsDataSourceInterface>(),
+      ),
     );
     gh.factory<_i32.AuthRepoInterface>(
       () => _i167.AuthRepoImp(
@@ -111,6 +136,11 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i437.LoginCubit>(
       () => _i437.LoginCubit(gh<_i515.LoginUseCase>()),
+    );
+    gh.factory<_i257.GetProductDetailsUseCase>(
+      () => _i257.GetProductDetailsUseCase(
+        gh<_i878.ProductDetailsRepoInterface>(),
+      ),
     );
     gh.factory<_i879.RegisterCubit>(
       () => _i879.RegisterCubit(gh<_i700.RegisterUseCase>()),

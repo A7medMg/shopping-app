@@ -32,6 +32,7 @@ class ProductItemCard extends StatefulWidget {
 
 class _ProductItemCardState extends State<ProductItemCard> {
   bool isFavorite = false;
+  bool _isHovered = false;
 
   @override
   Widget build(BuildContext context) {
@@ -39,128 +40,149 @@ class _ProductItemCardState extends State<ProductItemCard> {
         ? widget.price / (1 - (widget.discount / 100))
         : widget.price + 50;
 
-    return GestureDetector(
-      onTap: widget.onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(18.r),
-          border: Border.all(color: Colors.grey.shade200, width: 1.w),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.08),
-              blurRadius: 8,
-              offset: const Offset(0, 4),
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          transform: Matrix4.diagonal3Values(
+            _isHovered ? 1.02 : 1.0,
+            _isHovered ? 1.02 : 1.0,
+            1.0,
+          ),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(18.r),
+            border: Border.all(
+              color: _isHovered
+                  ? AppColors.primaryOrange.withValues(alpha: 0.5)
+                  : Colors.grey.shade200,
+              width: _isHovered ? 2.w : 1.w,
             ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Stack(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(18.r),
-                    topRight: Radius.circular(18.r),
-                  ),
-                  child: SizedBox(
-                    height: 140.h,
-                    width: double.infinity,
-                    child: CachedNetworkImage(
-                      imageUrl: widget.image,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) => Center(
-                        child: CircularProgressIndicator(
-                          color: AppColors.primaryOrange,
+            boxShadow: [
+              BoxShadow(
+                color: _isHovered
+                    ? AppColors.primaryOrange.withValues(alpha: 0.15)
+                    : Colors.grey.withValues(alpha: 0.08),
+                blurRadius: _isHovered ? 16 : 8,
+                offset: _isHovered ? const Offset(0, 8) : const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(18.r),
+                      topRight: Radius.circular(18.r),
+                    ),
+                    child: SizedBox(
+                      height: 140.h,
+                      width: double.infinity,
+                      child: CachedNetworkImage(
+                        imageUrl: widget.image,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => Center(
+                          child: CircularProgressIndicator(
+                            color: AppColors.primaryOrange,
+                          ),
                         ),
-                      ),
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 6,
-                  right: 6,
-                  child: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        isFavorite = !isFavorite;
-                      });
-                    },
-                    icon: Icon(
-                      isFavorite
-                          ? Icons.favorite_rounded
-                          : Icons.favorite_border_rounded,
-                      size: 22,
-                      color: isFavorite ? Colors.red : Colors.white,
-                      shadows: const [
-                        Shadow(color: Colors.black54, blurRadius: 4),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      widget.title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w500,
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
                       ),
                     ),
-                    verticalSpacing(4),
-                    Row(
-                      children: [
-                        Text(
-                          "EGP ${widget.price.toStringAsFixed(0)}",
-                          style: Theme.of(context).textTheme.bodyMedium
-                              ?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
+                  ),
+                  Positioned(
+                    top: 6,
+                    right: 6,
+                    child: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          isFavorite = !isFavorite;
+                        });
+                      },
+                      icon: Icon(
+                        isFavorite
+                            ? Icons.favorite_rounded
+                            : Icons.favorite_border_rounded,
+                        size: 22,
+                        color: isFavorite ? Colors.red : Colors.white,
+                        shadows: const [
+                          Shadow(color: Colors.black54, blurRadius: 4),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 10.w,
+                    vertical: 8.h,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        widget.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w500,
                         ),
-                        horizontalSpacing(6),
-                        if (widget.discount > 0)
+                      ),
+                      verticalSpacing(4),
+                      Row(
+                        children: [
                           Text(
-                            "EGP ${oldPrice.toStringAsFixed(0)}",
-                            style: Theme.of(context).textTheme.bodySmall
+                            "EGP ${widget.price.toStringAsFixed(0)}",
+                            style: Theme.of(context).textTheme.bodyMedium
                                 ?.copyWith(
-                                  color: Colors.grey,
-                                  decoration: TextDecoration.lineThrough,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
                                 ),
                           ),
-                      ],
-                    ),
-                    verticalSpacing(4),
-                    Row(
-                      children: [
-                        Icon(Icons.star, color: Colors.amber, size: 16.sp),
-                        horizontalSpacing(4),
-                        Text(
-                          widget.rating.toString(),
-                          style: Theme.of(context).textTheme.bodySmall
-                              ?.copyWith(
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black87,
-                              ),
-                        ),
-                      ],
-                    ),
-                  ],
+                          horizontalSpacing(6),
+                          if (widget.discount > 0)
+                            Text(
+                              "EGP ${oldPrice.toStringAsFixed(0)}",
+                              style: Theme.of(context).textTheme.bodySmall
+                                  ?.copyWith(
+                                    color: Colors.grey,
+                                    decoration: TextDecoration.lineThrough,
+                                  ),
+                            ),
+                        ],
+                      ),
+                      verticalSpacing(4),
+                      Row(
+                        children: [
+                          Icon(Icons.star, color: Colors.amber, size: 16.sp),
+                          horizontalSpacing(4),
+                          Text(
+                            widget.rating.toString(),
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black87,
+                                ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

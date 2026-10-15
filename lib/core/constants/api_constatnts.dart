@@ -10,6 +10,7 @@ abstract class ApiConstants {
   static const String getProByCategory = '/home/products/category';
   static const String getAllCategories = '/home/categories';
   static const String getAllProduct = '/home/products';
+  static const String getProductDetails = '/home/products';
   static const String getFavorite = '/user/getFavorite';
   static const String addToFavorite = '/user/addFavorite';
   static const String removeFavorite = '/user/deleteFavorite';
