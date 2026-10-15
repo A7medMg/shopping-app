@@ -17,6 +17,8 @@ import 'package:injectable/injectable.dart' as _i526;
 import 'package:shoppingapp/core/di/register_module.dart' as _i999;
 import 'package:shoppingapp/core/helper/app_secure_storage.dart' as _i161;
 import 'package:shoppingapp/core/network/dio_factory.dart' as _i590;
+import 'package:shoppingapp/feature/app_section/presentation/view_model/app_section_cubit.dart'
+    as _i525;
 import 'package:shoppingapp/feature/auth/data/api/auth_api.dart' as _i425;
 import 'package:shoppingapp/feature/auth/data/repo/auth_data_source_imp.dart'
     as _i520;
@@ -60,6 +62,7 @@ extension GetItInjectableX on _i174.GetIt {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final registerModule = _$RegisterModule();
     gh.factory<_i558.FlutterSecureStorage>(() => registerModule.secureStorage);
+    gh.factory<_i525.AppSectionCubit>(() => _i525.AppSectionCubit());
     gh.singleton<_i590.DioFactory>(() => _i590.DioFactory());
     gh.lazySingleton<_i361.Dio>(() => registerModule.dio);
     gh.factory<_i855.HomeApi>(() => _i204.HomeApiImp(gh<_i361.Dio>()));

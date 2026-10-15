@@ -51,6 +51,7 @@ class HelloScreen extends StatelessWidget {
                   onPressed: () {
                     context.pushNamed(AppRoutesName.login);
                   },
+
                   style: OutlinedButton.styleFrom(
                     splashFactory: NoSplash.splashFactory,
                     side: const BorderSide(color: AppColors.primaryOrange),

@@ -7,7 +7,7 @@ Future<String> initialRoute() async {
   final storage = serviceLocator<AppSecureStorage>();
   final token = await storage.read(AppKeys.token);
   if (token?.isNotEmpty == true) {
-    return AppRoutesName.onBoarding;
+    return AppRoutesName.appSection;
   } else {
     return AppRoutesName.hello;
   }
