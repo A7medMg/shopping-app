@@ -103,7 +103,7 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i910.AccountApiImp(gh<_i361.Dio>()),
     );
     gh.factory<_i165.ProductDetailsApi>(
-      () => _i318.ProductDetailsApiImp(gh<_i361.Dio>()),
+      () => _i318.ProductDetailsApiImpl(gh<_i361.Dio>()),
     );
     gh.factory<_i18.AccDataSourceInterface>(
       () => _i793.AccDataSourceImp(

@@ -4,9 +4,8 @@ import 'package:shoppingapp/core/widgets/product_item_card.dart';
 import 'package:shoppingapp/feature/home/presentation/view_models/home_cubit.dart';
 import 'package:shoppingapp/feature/home/presentation/view_models/home_state.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:shoppingapp/feature/product_details/presentation/screens/product_details_screen.dart';
-import 'package:shoppingapp/feature/product_details/domain/use_case/get_product_details_use_case.dart';
-import 'package:shoppingapp/core/di/service_locator.dart';
+import 'package:shoppingapp/core/extensions/extensions.dart';
+import 'package:shoppingapp/core/routes/app_routes_name.dart';
 
 class HomeCubitProductBuilder extends StatelessWidget {
   const HomeCubitProductBuilder({super.key});
@@ -33,13 +32,9 @@ class HomeCubitProductBuilder extends StatelessWidget {
                 final product = state.product[index];
                 return ProductItemCard(
                   onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => ProductDetailsScreen(
-                          useCase: serviceLocator<GetProductDetailsUseCase>(),
-                          productId: product.id,
-                        ),
-                      ),
+                    context.pushNamed(
+                      AppRoutesName.productDetails,
+                      arguments: product.id,
                     );
                   },
                   title: product.title,

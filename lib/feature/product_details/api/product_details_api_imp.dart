@@ -7,10 +7,10 @@ import 'package:shoppingapp/feature/product_details/data/api/product_details_api
 import 'package:shoppingapp/feature/product_details/data/models/product_details_dto.dart';
 
 @Injectable(as: ProductDetailsApi)
-class ProductDetailsApiImp implements ProductDetailsApi {
+class ProductDetailsApiImpl implements ProductDetailsApi {
   final Dio _dio;
 
-  ProductDetailsApiImp(this._dio);
+  ProductDetailsApiImpl(this._dio);
 
   @override
   Future<ResultApi<ProductDetailsDto>> getProductDetails(int productId) async {
