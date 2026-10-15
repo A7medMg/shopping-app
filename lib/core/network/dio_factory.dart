@@ -1,26 +1,45 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:shoppingapp/core/constants/api_constatnts.dart';
+import 'package:shoppingapp/core/constants/app_keys.dart';
+import 'package:shoppingapp/core/helper/app_secure_storage.dart';
 
-@module
-abstract class DioModule {
-  @singleton
-  Dio provideDio() {
-    const connectTimeout = Duration(seconds: 30);
+@singleton
+class DioFactory {
+  final Dio dio;
 
-    final dio = Dio(
-      BaseOptions(
-        baseUrl: 'https://supermarket-dan1.onrender.com/api/v1',
-        connectTimeout: connectTimeout,
-        receiveTimeout: connectTimeout,
+  DioFactory()
+    : dio = Dio(
+        BaseOptions(
+          baseUrl: ApiConstants.baseUrl,
+          connectTimeout: const Duration(seconds: 30),
+          receiveTimeout: const Duration(seconds: 30),
+          headers: {'Accept': 'application/json'},
+        ),
+      ) {
+    _addInterceptors();
+  }
+
+  void _addInterceptors() {
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) async {
+          final token = await AppSecureStorage(
+            const FlutterSecureStorage(),
+          ).read(AppKeys.token);
+
+          if (token != null && token.isNotEmpty) {
+            options.headers['Authorization'] = 'Bearer $token';
+          } else {
+            options.headers.remove('Authorization');
+          }
+
+          handler.next(options);
+        },
       ),
     );
-
-    dio.options.headers = {
-      'Accept': 'application/json',
-      'Authorization':
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYmZkYjczYjUyNzAxMTA5YTJiYjUzZSIsImlhdCI6MTc5MTAzOTIzNywiZXhwIjoxNzkzNjMxMjM3fQ.TSXiygT8c4LeEUi-K_-iC1G9CoHJxf8r1hWzojIStiI',
-    };
 
     dio.interceptors.add(
       PrettyDioLogger(
@@ -29,42 +48,13 @@ abstract class DioModule {
         responseHeader: true,
       ),
     );
+  }
 
-    return dio;
+  void setTokenIntoHeaderAfterLogin(String token) {
+    dio.options.headers['Authorization'] = 'Bearer $token';
+  }
+
+  void removeTokenFromHeader() {
+    dio.options.headers.remove('Authorization');
   }
 }
-// import 'package:dio/dio.dart';
-// import 'package:injectable/injectable.dart';
-// import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-
-
-// @singleton
-// class DioFactory {
-//   late final Dio dio;
-
-//   DioFactory(String apiBaseUrl) : dio = _createDio(apiBaseUrl);
-
-//   static Dio _createDio(String apiBaseUrl) {
-//     const connectTimeout = Duration(seconds: 30);
-//     final dio = Dio(
-//       BaseOptions(
-//         baseUrl: apiBaseUrl,
-//         connectTimeout: connectTimeout,
-//         receiveTimeout: connectTimeout,
-//       ),
-//     );
-//     dio.options.headers = {
-//       'Accept': 'application/json',
-//       'Authorization': 'Bearer $token',
-//     };
-//     dio.interceptors.add(
-//       PrettyDioLogger(
-//         requestBody: true,
-//         requestHeader: true,
-//         responseHeader: true,
-//       ),
-//     );
-//     return dio;
-//   }
-// }
-// String token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYmZkYjczYjUyNzAxMTA5YTJiYjUzZSIsImlhdCI6MTc5MTAzOTIzNywiZXhwIjoxNzkzNjMxMjM3fQ.TSXiygT8c4LeEUi-K_-iC1G9CoHJxf8r1hWzojIStiI";

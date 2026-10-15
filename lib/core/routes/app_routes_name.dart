@@ -1,6 +1,6 @@
 abstract class AppRoutesName{
   static const String onBoarding="/onBoarding";
- static const String login = '/login';
+  static const String login = '/login';
   static const String hello = '/hello';
   static const String register = '/register';
   static const String appSection = '/appSection';

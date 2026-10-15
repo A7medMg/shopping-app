@@ -49,7 +49,7 @@ class HelloScreen extends StatelessWidget {
                 height: 52,
                 child: OutlinedButton(
                   onPressed: () {
-                    context.pushNamed(AppRoutesName.onBoarding);
+                    context.pushNamed(AppRoutesName.login);
                   },
                   style: OutlinedButton.styleFrom(
                     splashFactory: NoSplash.splashFactory,

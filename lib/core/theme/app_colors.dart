@@ -15,8 +15,9 @@ abstract final class AppColors {
 
   // Text / supporting colors
   static const Color bodyText = Color(0xFF45455F);
-  static const Color mutedText = Color(0xFF7B7F90);
+  static const Color mutedText = Color(0xFFC6C6C6);
   static const Color border = Color(0xFFE2E5EA);
+  static const Color hintgray = Color(0xFFC6C6C6);
 
   // Button states
   static const Color disabledBackground = Color(0xFFECEEF2);
