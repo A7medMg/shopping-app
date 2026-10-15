@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:shoppingapp/core/di/service_locator.dart';
+
 import 'package:shoppingapp/core/theme/app_colors.dart';
 
 import 'package:shoppingapp/feature/account/presentation/view/screens/account_screen.dart';
@@ -14,65 +14,58 @@ import 'package:shoppingapp/feature/home/presentation/view_models/home_cubit.dar
 class AppSection extends StatelessWidget {
   const AppSection({super.key});
 
-  static const List<Widget> _screens = [
-    HomeScreen(),
-    CartScreen(),
-    FavouriteScreen(),
-    AccountScreen(),
+  static final List<Widget> _screens = [
+    BlocProvider(
+      create: (context) => serviceLocator<HomeCubit>()..getHomeData(),
+      child: const HomeScreen(),
+    ),
+    const CartScreen(),
+    const FavouriteScreen(),
+    const AccountScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (_) => AppSectionCubit(),
-        ),
-        BlocProvider(
-          create: (_) => serviceLocator<HomeCubit>()..getHomeData(),
-        ),
-      ],
-      child: BlocBuilder<AppSectionCubit, int>(
-        builder: (context, currentIndex) {
-          return Scaffold(
-            body: IndexedStack(
-              index: currentIndex,
-              children: _screens,
-            ),
-            bottomNavigationBar: BottomNavigationBar(
-              currentIndex: currentIndex,
-              onTap: (index) {
-                context.read<AppSectionCubit>().changeTab(index);
-              },
-              type: BottomNavigationBarType.fixed,
-              selectedItemColor: AppColors.primaryOrange,
-              unselectedItemColor: AppColors.mutedText,
-              items: const [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.home_outlined),
-                  activeIcon: Icon(Icons.home),
-                  label: 'Home',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.shopping_cart_outlined),
-                  activeIcon: Icon(Icons.shopping_cart),
-                  label: 'Cart',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.favorite_border),
-                  activeIcon: Icon(Icons.favorite),
-                  label: 'Favourite',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.person_outline),
-                  activeIcon: Icon(Icons.person),
-                  label: 'Account',
-                ),
-              ],
-            ),
-          );
-        },
-      ),
+    return BlocBuilder<AppSectionCubit, int>(
+      builder: (context, currentIndex) {
+        return Scaffold(
+          body: IndexedStack(
+            index: currentIndex,
+            children: _screens,
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: currentIndex,
+            onTap: (index) {
+              context.read<AppSectionCubit>().changeTab(index);
+            },
+            type: BottomNavigationBarType.fixed,
+            selectedItemColor: AppColors.primaryOrange,
+            unselectedItemColor: AppColors.mutedText,
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home_outlined),
+                activeIcon: Icon(Icons.home),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.shopping_cart_outlined),
+                activeIcon: Icon(Icons.shopping_cart),
+                label: 'Cart',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.favorite_border),
+                activeIcon: Icon(Icons.favorite),
+                label: 'Favourite',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person_outline),
+                activeIcon: Icon(Icons.person),
+                label: 'Account',
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

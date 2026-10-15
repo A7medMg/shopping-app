@@ -16,6 +16,8 @@ import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:shoppingapp/core/helper/app_secure_storage.dart' as _i161;
 import 'package:shoppingapp/core/network/dio_factory.dart' as _i590;
+import 'package:shoppingapp/feature/app_section/presentation/view_model/app_section_cubit.dart'
+    as _i525;
 import 'package:shoppingapp/feature/home/data/api/home_api.dart' as _i855;
 import 'package:shoppingapp/feature/home/data/api/home_api_imp.dart' as _i204;
 import 'package:shoppingapp/feature/home/data/repo/home_data_source_imp.dart'
@@ -42,6 +44,7 @@ extension GetItInjectableX on _i174.GetIt {
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final dioModule = _$DioModule();
+    gh.factory<_i525.AppSectionCubit>(() => _i525.AppSectionCubit());
     gh.singleton<_i361.Dio>(() => dioModule.provideDio());
     gh.factory<_i855.HomeApi>(() => _i204.HomeApiImp(gh<_i361.Dio>()));
     gh.lazySingleton<_i161.AppSecureStorage>(
