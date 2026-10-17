@@ -86,6 +86,21 @@ import 'package:shoppingapp/feature/product_details/domain/repo/product_details_
     as _i878;
 import 'package:shoppingapp/feature/product_details/domain/use_case/get_product_details_use_case.dart'
     as _i257;
+import 'package:shoppingapp/feature/search/data/api/search_api.dart' as _i912;
+import 'package:shoppingapp/feature/search/data/api/search_api_imp.dart'
+    as _i873;
+import 'package:shoppingapp/feature/search/data/repo/search_data_source_imp.dart'
+    as _i32;
+import 'package:shoppingapp/feature/search/data/repo/search_repo_imp.dart'
+    as _i127;
+import 'package:shoppingapp/feature/search/domain/repo/search_data_source_interface.dart'
+    as _i486;
+import 'package:shoppingapp/feature/search/domain/repo/search_repo_interface.dart'
+    as _i883;
+import 'package:shoppingapp/feature/search/domain/use_case/search_products_use_case.dart'
+    as _i898;
+import 'package:shoppingapp/feature/search/presentation/view_model/search_cubit.dart'
+    as _i240;
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
@@ -111,7 +126,17 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i179.AccountApiInterface>(),
       ),
     );
+    gh.factory<_i912.SearchApi>(() => _i873.SearchApiImp(gh<_i361.Dio>()));
+    gh.factory<_i486.SearchDataSourceInterface>(
+      () => _i32.SearchDataSourceImp(gh<_i912.SearchApi>()),
+    );
+    gh.factory<_i883.SearchRepoInterface>(
+      () => _i127.SearchRepoImp(gh<_i486.SearchDataSourceInterface>()),
+    );
     gh.factory<_i855.HomeApi>(() => _i204.HomeApiImp(gh<_i361.Dio>()));
+    gh.factory<_i898.SearchProductsUseCase>(
+      () => _i898.SearchProductsUseCase(gh<_i883.SearchRepoInterface>()),
+    );
     gh.lazySingleton<_i161.AppSecureStorage>(
       () => _i161.AppSecureStorage(gh<_i558.FlutterSecureStorage>()),
     );
@@ -123,6 +148,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i710.ProductDetailsDataSourceInterface>(
       () => _i187.ProductDetailsDataSourceImp(gh<_i165.ProductDetailsApi>()),
+    );
+    gh.factory<_i240.SearchCubit>(
+      () => _i240.SearchCubit(gh<_i898.SearchProductsUseCase>()),
     );
     gh.lazySingleton<_i425.AuthApi>(
       () => _i425.AuthApi(gh<_i590.DioFactory>(), gh<_i161.AppSecureStorage>()),

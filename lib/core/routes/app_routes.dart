@@ -10,6 +10,7 @@ import 'package:shoppingapp/feature/auth/presentation/view_model/login/login_cub
 import 'package:shoppingapp/feature/auth/presentation/view_model/register/register_cubit.dart';
 import 'package:shoppingapp/feature/hello/presentation/screens/hello_screen.dart';
 import 'package:shoppingapp/feature/product_details/presentation/screens/product_details_screen.dart';
+import 'package:shoppingapp/feature/search/presentation/screen/search_screen.dart';
 
 abstract class AppRoutes {
   static Route? onGenerateRoute(RouteSettings settings) {
@@ -45,9 +46,11 @@ abstract class AppRoutes {
         return MaterialPageRoute(
           builder: (_) => ProductDetailsScreen(
             productId: productId,
-            useCase: serviceLocator(), 
+            useCase: serviceLocator(),
           ),
         );
+      case AppRoutesName.search:
+        return MaterialPageRoute(builder: (_) => const SearchScreen());
 
       default:
         return null;
