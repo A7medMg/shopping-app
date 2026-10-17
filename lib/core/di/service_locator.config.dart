@@ -55,6 +55,25 @@ import 'package:shoppingapp/feature/auth/presentation/view_model/login/login_cub
     as _i437;
 import 'package:shoppingapp/feature/auth/presentation/view_model/register/register_cubit.dart'
     as _i879;
+import 'package:shoppingapp/feature/favorite/api/fav_api_imp.dart' as _i584;
+import 'package:shoppingapp/feature/favorite/api/fav_api_interface.dart'
+    as _i669;
+import 'package:shoppingapp/feature/favorite/data/repo/fav_data_source_imp.dart'
+    as _i294;
+import 'package:shoppingapp/feature/favorite/data/repo/fav_repo_imp.dart'
+    as _i947;
+import 'package:shoppingapp/feature/favorite/domain/repo/fav_data_source_interface.dart'
+    as _i1065;
+import 'package:shoppingapp/feature/favorite/domain/repo/fav_repo_interface.dart'
+    as _i259;
+import 'package:shoppingapp/feature/favorite/domain/use_case/add_to_favorite_use_case.dart'
+    as _i260;
+import 'package:shoppingapp/feature/favorite/domain/use_case/get_fav_use_case.dart'
+    as _i834;
+import 'package:shoppingapp/feature/favorite/domain/use_case/remove_favorite_use_case.dart'
+    as _i389;
+import 'package:shoppingapp/feature/favorite/presentation/view_model/fav_cubit.dart'
+    as _i79;
 import 'package:shoppingapp/feature/home/data/api/home_api.dart' as _i855;
 import 'package:shoppingapp/feature/home/data/api/home_api_imp.dart' as _i204;
 import 'package:shoppingapp/feature/home/data/repo/home_data_source_imp.dart'
@@ -117,6 +136,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i179.AccountApiInterface>(
       () => _i910.AccountApiImp(gh<_i361.Dio>()),
     );
+    gh.factory<_i669.FavoriteApiInterface>(
+      () => _i584.FavoriteApiImp(gh<_i361.Dio>()),
+    );
     gh.factory<_i165.ProductDetailsApi>(
       () => _i318.ProductDetailsApiImpl(gh<_i361.Dio>()),
     );
@@ -132,6 +154,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i883.SearchRepoInterface>(
       () => _i127.SearchRepoImp(gh<_i486.SearchDataSourceInterface>()),
+    );
+    gh.factory<_i1065.FavoriteDataSourceInterface>(
+      () => _i294.FavoriteDataSourceImp(gh<_i669.FavoriteApiInterface>()),
     );
     gh.factory<_i855.HomeApi>(() => _i204.HomeApiImp(gh<_i361.Dio>()));
     gh.factory<_i898.SearchProductsUseCase>(
@@ -157,6 +182,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i344.AccRepoInterface>(
       () => _i802.AccRepoImp(gh<_i18.AccDataSourceInterface>()),
+    );
+    gh.factory<_i259.FavoriteRepoInterface>(
+      () => _i947.FavoriteRepoImp(gh<_i1065.FavoriteDataSourceInterface>()),
     );
     gh.factory<_i627.AuthDataSourceInterface>(
       () => _i520.AuthDataSourceImp(gh<_i425.AuthApi>()),
@@ -210,6 +238,18 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i257.GetProductDetailsUseCase(
         gh<_i878.ProductDetailsRepoInterface>(),
       ),
+    );
+    gh.factory<_i260.AddToFavoriteUseCase>(
+      () => _i260.AddToFavoriteUseCase(gh<_i259.FavoriteRepoInterface>()),
+    );
+    gh.factory<_i834.GetFavoriteUseCase>(
+      () => _i834.GetFavoriteUseCase(gh<_i259.FavoriteRepoInterface>()),
+    );
+    gh.factory<_i389.RemoveFavoriteUseCase>(
+      () => _i389.RemoveFavoriteUseCase(gh<_i259.FavoriteRepoInterface>()),
+    );
+    gh.lazySingleton<_i79.FavoriteCubit>(
+      () => _i79.FavoriteCubit(gh<_i834.GetFavoriteUseCase>()),
     );
     gh.factory<_i846.AccountCubit>(
       () => _i846.AccountCubit(
