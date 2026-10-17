@@ -9,11 +9,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   configureDependencies();
   String initRoute = await initialRoute();
-  runApp(ShoppingApp(initRoute: initRoute,));
+  runApp(ShoppingApp(initRoute: initRoute));
 }
 
 class ShoppingApp extends StatelessWidget {
-  const ShoppingApp({super.key,required this.initRoute});
+  const ShoppingApp({super.key, required this.initRoute});
   final String initRoute;
 
   @override
@@ -23,7 +23,7 @@ class ShoppingApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) => MaterialApp(
-        initialRoute:initRoute,
+        initialRoute: initRoute,
         onGenerateRoute: AppRoutes.onGenerateRoute,
         debugShowCheckedModeBanner: false,
         theme: AppTheme.light,

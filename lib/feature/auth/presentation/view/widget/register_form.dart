@@ -128,7 +128,6 @@ class _RegisterFormState extends State<RegisterForm> {
                 if (formKey.currentState!.validate()) {
                   await context.read<RegisterCubit>().intent(Register(request));
                 }
-                ;
               },
             ),
           ],
