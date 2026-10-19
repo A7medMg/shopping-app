@@ -8,6 +8,7 @@ import 'package:shoppingapp/feature/auth/presentation/view/screens/login_screen.
 import 'package:shoppingapp/feature/auth/presentation/view/screens/register_screen.dart';
 import 'package:shoppingapp/feature/auth/presentation/view_model/login/login_cubit.dart';
 import 'package:shoppingapp/feature/auth/presentation/view_model/register/register_cubit.dart';
+import 'package:shoppingapp/feature/favorite/presentation/view_model/fav_cubit.dart';
 import 'package:shoppingapp/feature/hello/presentation/screens/hello_screen.dart';
 import 'package:shoppingapp/feature/product_details/presentation/screens/product_details_screen.dart';
 import 'package:shoppingapp/feature/search/presentation/screen/search_screen.dart';
@@ -17,8 +18,17 @@ abstract class AppRoutes {
     switch (settings.name) {
       case AppRoutesName.appSection:
         return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (_) => serviceLocator<AppSectionCubit>(),
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider<AppSectionCubit>(
+                create: (_) => serviceLocator<AppSectionCubit>(),
+
+              ),
+              BlocProvider(
+                create: (_) => serviceLocator<FavoriteCubit>(),
+              ),
+
+            ],
             child: const AppSection(),
           ),
         );

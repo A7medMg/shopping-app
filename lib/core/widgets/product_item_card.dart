@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shoppingapp/core/helper/spacing_helper.dart';
 import 'package:shoppingapp/core/theme/app_colors.dart';
+import 'package:shoppingapp/feature/favorite/presentation/view_model/fav_cubit.dart';
 
 class ProductItemCard extends StatefulWidget {
   const ProductItemCard({
@@ -75,8 +77,10 @@ class _ProductItemCardState extends State<ProductItemCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+
               Stack(
                 children: [
+
                   ClipRRect(
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(18.r),
@@ -103,6 +107,12 @@ class _ProductItemCardState extends State<ProductItemCard> {
                     right: 6,
                     child: IconButton(
                       onPressed: () {
+                        if (!isFavorite) {
+                        context.read<FavoriteCubit>().addToFavorite(widget.title);
+                        } else {
+                          context.read<FavoriteCubit>().removeFavorite("");
+                        }
+
                         setState(() {
                           isFavorite = !isFavorite;
                         });

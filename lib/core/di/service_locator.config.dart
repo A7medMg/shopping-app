@@ -248,9 +248,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i389.RemoveFavoriteUseCase>(
       () => _i389.RemoveFavoriteUseCase(gh<_i259.FavoriteRepoInterface>()),
     );
-    gh.lazySingleton<_i79.FavoriteCubit>(
-      () => _i79.FavoriteCubit(gh<_i834.GetFavoriteUseCase>()),
-    );
     gh.factory<_i846.AccountCubit>(
       () => _i846.AccountCubit(
         gh<_i653.GetUserUseCase>(),
@@ -260,6 +257,13 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i879.RegisterCubit>(
       () => _i879.RegisterCubit(gh<_i700.RegisterUseCase>()),
+    );
+    gh.factory<_i79.FavoriteCubit>(
+      () => _i79.FavoriteCubit(
+        gh<_i834.GetFavoriteUseCase>(),
+        gh<_i260.AddToFavoriteUseCase>(),
+        gh<_i389.RemoveFavoriteUseCase>(),
+      ),
     );
     return this;
   }

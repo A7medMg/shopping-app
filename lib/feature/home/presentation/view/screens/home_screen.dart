@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shoppingapp/core/helper/spacing_helper.dart';
+import 'package:shoppingapp/core/widgets/fav_bloc_listener.dart';
 import 'package:shoppingapp/feature/home/presentation/view/widget/home_category_bloc_builder.dart';
 import 'package:shoppingapp/feature/home/presentation/view/widget/home_cubit_product_builder.dart';
 import 'package:shoppingapp/feature/search/presentation/screen/search_screen.dart';
@@ -46,6 +47,8 @@ class HomeScreen extends StatelessWidget {
             HomeCategoryBlocBuilder(),
             verticalSpacing(10),
             HomeCubitProductBuilder(),
+                        FavBlocListener(),
+
           ],
         ),
       ),
