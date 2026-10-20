@@ -8,7 +8,8 @@ import 'package:shoppingapp/feature/account/presentation/view/screens/account_sc
 import 'package:shoppingapp/feature/account/presentation/view_model/account_cubit.dart';
 import 'package:shoppingapp/feature/app_section/presentation/view_model/app_section_cubit.dart';
 import 'package:shoppingapp/feature/cart/presentation/view/screens/cart_screen.dart';
-import 'package:shoppingapp/feature/favourite/presentation/view/screens/favourite_screen.dart';
+import 'package:shoppingapp/feature/favorite/presentation/view/screens/favourite_screen.dart';
+import 'package:shoppingapp/feature/favorite/presentation/view_model/fav_cubit.dart';
 import 'package:shoppingapp/feature/home/presentation/view/screens/home_screen.dart';
 import 'package:shoppingapp/feature/home/presentation/view_models/home_cubit.dart';
 
@@ -25,7 +26,12 @@ class AppSection extends StatelessWidget {
             child: const HomeScreen(),
           ),
           const CartScreen(),
-          const FavouriteScreen(),
+           if (currentIndex == 2)
+
+          BlocProvider(
+            create: (context) => serviceLocator<FavoriteCubit>(),
+            child: const FavouriteScreen(),
+          ),
           if (currentIndex == 3)
             BlocProvider(
               create: (context) => serviceLocator<AccountCubit>(),

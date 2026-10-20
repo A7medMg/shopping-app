@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shoppingapp/core/di/service_locator.dart';
 import 'package:shoppingapp/core/widgets/custom_text_form_field.dart';
+import 'package:shoppingapp/core/widgets/fav_bloc_listener.dart';
 import 'package:shoppingapp/core/widgets/product_item_card.dart';
+import 'package:shoppingapp/feature/favorite/presentation/view_model/fav_cubit.dart';
 import 'package:shoppingapp/feature/search/presentation/view_model/search_cubit.dart';
 import 'package:shoppingapp/feature/search/presentation/view_model/search_state.dart';
 import 'package:shoppingapp/feature/product_details/presentation/screens/product_details_screen.dart';
@@ -14,8 +16,15 @@ class SearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => serviceLocator<SearchCubit>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<SearchCubit>(
+          create: (_) => serviceLocator<SearchCubit>(),
+        ),
+        BlocProvider<FavoriteCubit>(
+          create: (_) => serviceLocator<FavoriteCubit>(),
+        ),
+      ],
       child: const _SearchScreenBody(),
     );
   }
@@ -38,6 +47,7 @@ class _SearchScreenBody extends StatelessWidget {
         padding: EdgeInsets.all(16.w),
         child: Column(
           children: [
+            FavBlocListener(),
             CustomTextFormField(
               hintText: 'Search for products...',
               prefixIcon: const Icon(Icons.search, color: Colors.black87),
