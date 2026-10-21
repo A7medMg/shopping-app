@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+
 import 'package:shoppingapp/core/network/api_result.dart';
 import 'package:shoppingapp/core/widgets/custom_button.dart';
+import 'package:shoppingapp/core/di/service_locator.dart';
+
 import 'package:shoppingapp/feature/product_details/domain/entities/product_details_entity.dart';
 import 'package:shoppingapp/feature/product_details/domain/use_case/get_product_details_use_case.dart';
+
+import 'package:shoppingapp/feature/cart/presentation/view_model/cart_cubit.dart';
+import 'package:shoppingapp/feature/cart/presentation/view_model/cart_state.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   final GetProductDetailsUseCase useCase;
@@ -25,9 +32,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   String? _errorMessage;
   int _currentImageIndex = 0;
 
+  late final CartCubit _cartCubit;
+
   @override
   void initState() {
     super.initState();
+    _cartCubit = serviceLocator<CartCubit>();
     _loadProduct();
   }
 
@@ -60,28 +70,36 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   }
 
   @override
+  void dispose() {
+    _cartCubit.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Product Details'),
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios_new,
-            size: 20,
-            color: Colors
-                .black, 
+    return BlocProvider<CartCubit>.value(
+      value: _cartCubit,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Product Details'),
+          centerTitle: true,
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back_ios_new,
+              size: 20,
+              color: Colors.black,
+            ),
+            onPressed: () => Navigator.pop(context),
           ),
-          onPressed: () => Navigator.pop(context),
         ),
+        body: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : _errorMessage != null
+            ? _buildError()
+            : _product == null
+            ? const Center(child: Text('Product not found'))
+            : _buildProduct(_product!),
       ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : _errorMessage != null
-          ? _buildError()
-          : _product == null
-          ? const Center(child: Text('Product not found'))
-          : _buildProduct(_product!),
     );
   }
 
@@ -274,15 +292,36 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 ),
               ],
             ),
-            child: CustomButton(
-              title: 'Add to Cart',
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                      'Add to Cart UI only - functionality not implemented',
+            child: BlocConsumer<CartCubit, CartState>(
+              listener: (context, state) {
+                if (state is AddToCartError) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(state.errorMessage),
+                      backgroundColor: Colors.red,
                     ),
-                  ),
+                  );
+                } else if (state is AddToCartSuccess) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Product added to cart successfully'),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                }
+              },
+              builder: (context, state) {
+                final isLoading = state is AddToCartLoading;
+
+                return CustomButton(
+                  title: isLoading ? 'Adding...' : 'Add to Cart',
+                  onPressed: () {
+                    if (isLoading) return;
+
+                    context.read<CartCubit>().addToCart(
+                      widget.productId.toString(),
+                    );
+                  },
                 );
               },
             ),

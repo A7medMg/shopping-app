@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoppingapp/core/di/service_locator.dart';
-
 import 'package:shoppingapp/core/theme/app_colors.dart';
 
 import 'package:shoppingapp/feature/account/presentation/view/screens/account_screen.dart';
 import 'package:shoppingapp/feature/account/presentation/view_model/account_cubit.dart';
 import 'package:shoppingapp/feature/app_section/presentation/view_model/app_section_cubit.dart';
 import 'package:shoppingapp/feature/cart/presentation/view/screens/cart_screen.dart';
+import 'package:shoppingapp/feature/cart/presentation/view_model/cart_cubit.dart';
 import 'package:shoppingapp/feature/favorite/presentation/view/screens/favourite_screen.dart';
 import 'package:shoppingapp/feature/favorite/presentation/view_model/fav_cubit.dart';
 import 'package:shoppingapp/feature/home/presentation/view/screens/home_screen.dart';
@@ -22,23 +22,21 @@ class AppSection extends StatelessWidget {
       builder: (context, currentIndex) {
         final screens = <Widget>[
           BlocProvider(
-            create: (context) => serviceLocator<HomeCubit>()..getHomeData(),
+            create: (_) => serviceLocator<HomeCubit>()..getHomeData(),
             child: const HomeScreen(),
           ),
-          const CartScreen(),
-           if (currentIndex == 2)
-
-          BlocProvider(
-            create: (context) => serviceLocator<FavoriteCubit>(),
+          BlocProvider<CartCubit>(
+            create: (_) => serviceLocator<CartCubit>()..getCart(),
+            child: const CartScreen(),
+          ),
+          BlocProvider<FavoriteCubit>(
+            create: (_) => serviceLocator<FavoriteCubit>(),
             child: const FavouriteScreen(),
           ),
-          if (currentIndex == 3)
-            BlocProvider(
-              create: (context) => serviceLocator<AccountCubit>(),
-              child: const AccountScreen(),
-            )
-          else
-            const SizedBox.shrink(),
+          BlocProvider<AccountCubit>(
+            create: (_) => serviceLocator<AccountCubit>(),
+            child: const AccountScreen(),
+          ),
         ];
 
         return Scaffold(
