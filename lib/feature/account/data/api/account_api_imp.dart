@@ -37,19 +37,17 @@ class AccountApiImp implements AccountApiInterface {
     required String address,
     required String phone,
     required String image,
-  }) async {
+  }) async{
     try {
-      var response = await dio.post(
-        ApiConstants.editUserData,
-        data: {
-          'name': name,
-          'address': address,
-          'phone': phone,
-          'image': image,
-        },
-      );
+      var response = await dio.post(ApiConstants.editUserData,data: {
+        'name': name,
+        'address': address,
+        'phone': phone,
+        'image': image,
+      });
+      var json = response.data;
       if (response.statusCode! >= 200 && response.statusCode! < 300) {
-        return Success<void>(null);
+        return Success(json);
       } else {
         return AppError('Failed to update user data');
       }
@@ -58,11 +56,11 @@ class AccountApiImp implements AccountApiInterface {
     } catch (e) {
       return AppError("Something went wrong");
     }
+    
   }
 
   @override
-  Future<ResultApi<String>> uploadImage(File image) async {
-    try {
+  Future<ResultApi<String>> uploadImage(File image) async{ try {
       final formData = FormData.fromMap({
         'file': await MultipartFile.fromFile(
           image.path,
@@ -80,4 +78,4 @@ class AccountApiImp implements AccountApiInterface {
       return AppError('Something went wrong');
     }
   }
-}
+  }
