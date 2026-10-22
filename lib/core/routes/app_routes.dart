@@ -12,10 +12,6 @@ import 'package:shoppingapp/feature/auth/presentation/view/screens/register_scre
 import 'package:shoppingapp/feature/auth/presentation/view_model/login/login_cubit.dart';
 import 'package:shoppingapp/feature/auth/presentation/view_model/register/register_cubit.dart';
 
-import 'package:shoppingapp/feature/cart/presentation/view/screens/cart_screen.dart';
-import 'package:shoppingapp/feature/cart/presentation/view_model/cart_cubit.dart';
-
-import 'package:shoppingapp/feature/favorite/presentation/view_model/fav_cubit.dart';
 
 import 'package:shoppingapp/feature/hello/presentation/screens/hello_screen.dart';
 import 'package:shoppingapp/feature/onboarding/view/on_boarding_screen.dart';
@@ -32,18 +28,11 @@ abstract class AppRoutes {
         );
 
       case AppRoutesName.appSection:
-        return MaterialPageRoute(
+        return MaterialPageRoute(  
           settings: settings,
-          builder: (_) => MultiBlocProvider(
-            providers: [
-              BlocProvider<AppSectionCubit>(
-                create: (_) => serviceLocator<AppSectionCubit>(),
-              ),
-              BlocProvider<FavoriteCubit>(
-                create: (_) => serviceLocator<FavoriteCubit>(),
-              ),
-            ],
-            child: const AppSection(),
+          builder: (_) =>  BlocProvider(
+            create: (context) => serviceLocator<AppSectionCubit>(),
+            child: AppSection(),
           ),
         );
 
@@ -68,15 +57,6 @@ abstract class AppRoutes {
           builder: (_) => BlocProvider<LoginCubit>(
             create: (_) => serviceLocator<LoginCubit>(),
             child: const LoginScreen(),
-          ),
-        );
-
-      case AppRoutesName.cart:
-        return MaterialPageRoute(
-          settings: settings,
-          builder: (_) => BlocProvider<CartCubit>(
-            create: (_) => serviceLocator<CartCubit>()..getCart(),
-            child: const CartScreen(),
           ),
         );
 
