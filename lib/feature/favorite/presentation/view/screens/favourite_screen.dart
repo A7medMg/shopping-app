@@ -25,6 +25,10 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         BlocBuilder<FavoriteCubit, FavoriteState>(
+          buildWhen: (previous, current) =>
+              current is FavoriteLoading ||
+              current is FavoriteSuccess ||
+              current is FavoriteError,
           builder: (context, state) {
             if (state is FavoriteError) {
               return Center(child: Text(state.errorMessage));

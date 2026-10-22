@@ -31,7 +31,7 @@ dependencies:
   cached_network_image: ^3.4.1
   cupertino_icons: ^1.0.8
   dio: ^5.11.1
-  shared_preferences: ^2.5.6
+  shared_preferences: ^2.5.5
 
 
   flutter:
@@ -50,7 +50,6 @@ dependencies:
   http: ^1.6.0
   bloc: ^9.2.1
   image_picker: ^1.2.3
-  meta: ^1.19.0
   localstorage: ^6.0.0
 
 dev_dependencies:

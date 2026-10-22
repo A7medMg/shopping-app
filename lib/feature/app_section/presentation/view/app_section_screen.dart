@@ -21,22 +21,31 @@ class AppSection extends StatelessWidget {
     return BlocBuilder<AppSectionCubit, int>(
       builder: (context, currentIndex) {
         final screens = <Widget>[
-          BlocProvider(
-            create: (_) => serviceLocator<HomeCubit>()..getHomeData(),
+          MultiBlocProvider(
+            providers: [
+              BlocProvider<HomeCubit>(
+                create: (_) => serviceLocator<HomeCubit>()..getHomeData(),
+              ),
+              BlocProvider<FavoriteCubit>(
+                create: (_) => serviceLocator<FavoriteCubit>(),
+              ),
+            ],
             child: const HomeScreen(),
           ),
           BlocProvider<CartCubit>(
             create: (_) => serviceLocator<CartCubit>()..getCart(),
             child: const CartScreen(),
           ),
+          currentIndex ==2?
           BlocProvider<FavoriteCubit>(
             create: (_) => serviceLocator<FavoriteCubit>(),
             child: const FavouriteScreen(),
-          ),
-          BlocProvider<AccountCubit>(
-            create: (_) => serviceLocator<AccountCubit>(),
-            child: const AccountScreen(),
-          ),
+          ):const SizedBox.shrink(),
+          currentIndex == 3?
+            BlocProvider<AccountCubit>(
+              create: (_) => serviceLocator<AccountCubit>(),
+              child: const AccountScreen(),
+            ):const SizedBox.shrink(),
         ];
 
         return Scaffold(
